@@ -13,7 +13,7 @@
 - Support muti-band
 - Support different sample_rate, hop_size ...
 
-**Current traning...**
+**Current building...**
 
 **Firstly**, the datasets structure like below.
 
