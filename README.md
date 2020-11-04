@@ -1,18 +1,21 @@
 # Mutiband-HIFIGAN
 
-An implementation of HIFIGAN with muit-band.
+**An implementation of HIFIGAN with muit-band.**
 
-This project is based on:
-1. Offical implementation of [HIFI-GAN](https://github.com/jik876/hifi-gan) by jik876
-2. Unoffical implementation of [ParallelWaveGAN](https://github.com/kan-bayashi/ParallelWaveGAN) by kan-bayashi
+**This project is based on:**
+
+- Offical implementation of [HIFI-GAN](https://github.com/jik876/hifi-gan) by jik876
+- Unoffical implementation of [ParallelWaveGAN](https://github.com/kan-bayashi/ParallelWaveGAN) by kan-bayashi
+
+**Something new**
 
 - Support different datasets
 - Support muti-band
 - Support different sample_rate, hop_size ...
 
-Current traning...
+**Current traning...**
 
-First, the data structure like below.
+Firstly, the data structure like below.
 
     datasets:
         wavs:
@@ -22,10 +25,10 @@ First, the data structure like below.
                 ???.wav
             ..... 
 
-Second, create training.txt 
-    
+Secondly, create training.txt 
+   
     python preprocess.py
-    
+
 Thirdly, training
     
     python train.py
