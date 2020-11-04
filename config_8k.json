@@ -16,7 +16,7 @@
 
     "segment_size": 3200,
     "num_mels": 80,
-    "num_freq": 1025,
+    "num_freq": 513,
     "n_fft": 512,
     "hop_size": 100,
     "win_size": 400,

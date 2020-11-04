@@ -12,7 +12,7 @@ def main():
 
     parser.add_argument('--group_name', default=None)
     parser.add_argument('--checkpoint_path', default='cp_hifigan')
-    parser.add_argument('--config', default='config_v1.json')
+    parser.add_argument('--config', default='config_8k.json')
     parser.add_argument('--training_epochs', default=3100, type=int)
     parser.add_argument('--stdout_interval', default=5, type=int)
     parser.add_argument('--checkpoint_interval', default=5000, type=int)
