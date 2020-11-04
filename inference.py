@@ -13,6 +13,8 @@ from models import Generator
 h = None
 device = None
 
+os.environ["CUDA_VISIBLE_DEVICE"] = ""
+
 
 def load_checkpoint(filepath, device):
     assert os.path.isfile(filepath)
