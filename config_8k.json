@@ -23,6 +23,10 @@
 
     "sampling_rate": 8000,
 
+    "fft_sizes": [128, 228, 58],
+    "hop_sizes": [10, 20, 3],
+    "win_lengths": [50, 100, 20],
+
     "fmin": 0,
     "fmax": 4000,
     "fmax_for_loss": null,

@@ -7,6 +7,8 @@ import argparse
 import json
 import torch
 import torch.nn.functional as F
+from stftloss import MultiResolutionSTFTLoss
+from layers import PQMF
 from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data import DistributedSampler, DataLoader
 import torch.multiprocessing as mp
@@ -34,6 +36,8 @@ def train(rank, a, h):
     generator = Generator(h).to(device)
     mpd = MultiPeriodDiscriminator().to(device)
     msd = MultiScaleDiscriminator().to(device)
+    pqmf = PQMF().to(device)
+    stft_loss = MultiResolutionSTFTLoss(h.fft_sizes, h.hop_sizes, h.win_lengths).to(device)
 
     if rank == 0:
         print(generator)
@@ -104,6 +108,9 @@ def train(rank, a, h):
     generator.train()
     mpd.train()
     msd.train()
+
+
+
     for epoch in range(max(0, last_epoch), a.training_epochs):
         if rank == 0:
             start = time.time()
@@ -147,13 +154,20 @@ def train(rank, a, h):
             # L1 Mel-Spectrogram Loss
             loss_mel = F.l1_loss(y_mel, y_g_hat_mel) * 45
 
+            # Add sub_mag_loss
+            real_subs = pqmf.analysis(y).view(-1, y.size(2))
+            fake_subs = pqmf.analysis(y_g_hat).view(-1, y_g_hat.size(2))
+            sub_sc_loss, sub_mag_loss = stft_loss(real_subs.detach(), fake_subs)
+            loss_spec = 0.5 * (sub_mag_loss + sub_sc_loss) + loss_mel
+
+            # discriminator loss
             y_df_hat_r, y_df_hat_g, fmap_f_r, fmap_f_g = mpd(y, y_g_hat)
             y_ds_hat_r, y_ds_hat_g, fmap_s_r, fmap_s_g = msd(y, y_g_hat)
             loss_fm_f = feature_loss(fmap_f_r, fmap_f_g)
             loss_fm_s = feature_loss(fmap_s_r, fmap_s_g)
             loss_gen_f, losses_gen_f = generator_loss(y_df_hat_g)
             loss_gen_s, losses_gen_s = generator_loss(y_ds_hat_g)
-            loss_gen_all = loss_gen_s + loss_gen_f + loss_fm_s + loss_fm_f + loss_mel
+            loss_gen_all = loss_gen_s + loss_gen_f + loss_fm_s + loss_fm_f + loss_spec
 
             loss_gen_all.backward()
             optim_g.step()
@@ -185,6 +199,7 @@ def train(rank, a, h):
                 if steps % a.summary_interval == 0:
                     sw.add_scalar("training/gen_loss_total", loss_gen_all, steps)
                     sw.add_scalar("training/mel_spec_error", mel_error, steps)
+                    print(f"--Steps: {steps}, --g_loss: {loss_gen_all}, --mel_loos: {mel_error}, --d_loss: {loss_disc_all}")
 
                 # Validation
                 if steps % a.validation_interval == 0:  # and steps != 0:
