@@ -15,7 +15,7 @@
 
 **Current traning...**
 
-Firstly, the data structure like below.
+**Firstly**, the datasets structure like below.
 
     datasets:
         wavs:
@@ -25,11 +25,11 @@ Firstly, the data structure like below.
                 ???.wav
             ..... 
 
-Secondly, create training.txt 
+**Secondly**, create training.txt 
    
     python preprocess.py
 
-Thirdly, training
+**Thirdly**, training
     
     python train.py
 
