@@ -1,6 +1,6 @@
 # Mutiband-HIFIGAN
 
-**An implementation of HIFIGAN with muit-band.**
+**An Easy Implementation of HIFIGAN with muit-band.**
 
 **This project is based on:**
 
@@ -13,7 +13,7 @@
 - Support muti-band
 - Support different sample_rate, hop_size ...
 
-**Current building...**
+**Current Training...**
 
 **Firstly**, the datasets structure like below.
 
@@ -33,3 +33,6 @@
     
     python train.py
 
+**Some problems**
+while using pqmf merge four subbands(value between -1 and 1), value may greater than 1.0 and less than -1.0.
+I think it may cause by PQMF filters (can't reconstruct perfectly)
