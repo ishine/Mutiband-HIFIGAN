@@ -26,7 +26,7 @@
             ..... 
 
 **Secondly**, create training.txt 
-   
+
     python preprocess.py
 
 **Thirdly**, training
@@ -34,5 +34,6 @@
     python train.py
 
 **Some problems**
+
 while using pqmf merge four subbands(value between -1 and 1), value may greater than 1.0 and less than -1.0.
 I think it may cause by PQMF filters (can't reconstruct perfectly)
